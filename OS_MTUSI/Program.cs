@@ -37,6 +37,15 @@ namespace OS_MTUSI
                     Milliseconds = (short)dt.Millisecond;
                 }
             }
+
+            public enum SystemMetric
+            {
+                SM_CXSCREEN = 0,  // 0x00
+                SM_CYSCREEN = 1,  // 0x01
+                SM_CXVSCROLL = 2,  // 0x02
+                SM_CYHSCROLL = 3,  // 0x03
+                SM_REMOTECONTROL = 0x2001, // 0x2001
+            }
             #endregion
 
             #region "Мотоды внешней реализации"
@@ -52,6 +61,9 @@ namespace OS_MTUSI
 
             [DllImport("kernel32.dll")]
             static extern void GetLocalTime(out SYSTEMTIME lpSystemTime);
+
+            [DllImport("user32.dll")]
+            static extern int GetSystemMetrics(SystemMetric smIndex);
 
             #endregion
 
@@ -87,12 +99,20 @@ namespace OS_MTUSI
                 Console.WriteLine($"Текущее время: {sysTime.Hour}:{sysTime.Minute}:{sysTime.Second}");
             }
             
+            //Получение системных метрик (Разрешение экрана) 
+            private static void T4()
+            {
+                
+                Console.WriteLine($"Разрешение экрана: {GetSystemMetrics(SystemMetric.SM_CXSCREEN)}x{GetSystemMetrics(SystemMetric.SM_CYSCREEN)}");
+            }
+
             //Исполнение всех подзадач
             public static void PrintTasks()
             {
-                //T1();
+                T1();
                 T2();
                 T3();
+                T4();
             }
         }
        
